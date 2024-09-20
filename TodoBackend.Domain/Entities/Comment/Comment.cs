@@ -1,8 +1,8 @@
 using TodoBackend.Domain.Entities.Common;
 
-namespace TodoBackend.Domain.Entities.Comments;
+namespace TodoBackend.Domain.Entities.Comment;
 
-public class Comments: BaseEntity
+public class Comment: BaseEntity
 {
     public Guid TodoId { get; set; }
     public string Content { get; set; }
