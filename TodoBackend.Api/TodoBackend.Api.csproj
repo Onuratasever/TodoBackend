@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TodoBackend.Application\TodoBackend.Application.csproj" />
+      <ProjectReference Include="..\TodoBackend.Persistence\TodoBackend.Persistence.csproj" />
     </ItemGroup>
 
 </Project>
