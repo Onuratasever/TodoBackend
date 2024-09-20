@@ -25,7 +25,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Cascade);  // Optional: Cascade delete
+            .OnDelete(DeleteBehavior.NoAction);  // No action for User
 
         builder.Property(c => c.CreatedAt).IsRequired();
         builder.Property(c => c.UpdatedAt).IsRequired();
