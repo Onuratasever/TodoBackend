@@ -1,0 +1,83 @@
+# .gitignore dosyası, projenize özel olarak özelleştirilebilir
+# Bu, sık kullanılan bazı dosya ve klasörleri dışlayan örnek bir listedir.
+# Projenizin ihtiyaçlarına göre bu listeyi genişletebilir veya daraltabilirsiniz.
+
+# Learn more about .gitignore:
+#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# ----------------------------------------------------------------------
+# .NET / C# Projeleri için:
+# ----------------------------------------------------------------------
+
+# Dotnet tarafından oluşturulan derleme ve geçici dosyalar
+bin/
+obj/
+
+# Visual Studio kullanıcıya özel ayar dosyaları
+*.user
+*.suo
+
+# Visual Studio proje dosyaları ve geçici ayarlar
+.vs/
+*.sln.docstates
+
+# Rider/JetBrains IDE için ayar dosyaları
+.idea/
+
+# ----------------------------------------------------------------------
+# Python Projeleri için:
+# ----------------------------------------------------------------------
+
+# Derlenmiş Python bytecode dosyaları
+*.py[cod]
+
+# ----------------------------------------------------------------------
+# İşletim Sistemi Tarafından Oluşturulan Geçici Dosyalar:
+# ----------------------------------------------------------------------
+
+# MacOS tarafından oluşturulan sistem dosyası
+.DS_Store
+
+# Windows tarafından oluşturulan sistem dosyası
+Thumbs.db
+
+# ----------------------------------------------------------------------
+# Genel Olarak Gözardı Edilmesi Gereken Dosyalar:
+# ----------------------------------------------------------------------
+
+# Log dosyaları
+*.log
+
+# Unit test rapor dosyaları
+TEST*.xml
+
+# Geçici dosyalar veya derlenmiş çalıştırılabilir dosyalar
+*.app
+*.exe
+*.dll
+*.war
+*.jar
+
+# Büyük medya dosyaları (projede gerekmedikçe)
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# Geçici veya deneme amaçlı dosyalar
+temp.txt
+
+# ----------------------------------------------------------------------
+# Konfigürasyon Dosyaları:
+# ----------------------------------------------------------------------
+
+# appsettings.json dosyası genellikle hassas bilgiler içerir
+# Bu dosyayı projede paylaşmak yerine appsettings.Development.json gibi
+# farklı yapılandırma dosyaları oluşturabilirsiniz.
+appsettings.json
+
+# Eğer hassas bilgileri dışarda bırakıp sadece genel ayarları paylaşmak
+# istiyorsanız, aşağıdaki gibi appsettings.json.example dosyası oluşturabilirsiniz.
+# Bu dosya projede kalabilir ve örnek yapılandırma dosyası olarak paylaşılabilir.
