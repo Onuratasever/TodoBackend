@@ -10,4 +10,8 @@
       <ProjectReference Include="..\TodoBackend.Domain\TodoBackend.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Abstractions\" />
+    </ItemGroup>
+
 </Project>
