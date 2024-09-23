@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
+using System.Configuration;
+using TodoBackend.Persistence.Configurations;
 
 namespace TodoBackend.Persistence;
 
@@ -8,7 +12,7 @@ public class DesignTimeDbContextFactory: IDesignTimeDbContextFactory<Application
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        optionsBuilder.UseSqlServer("Server=DESKTOP-K1K3TFG\\SQLEXPRESS;Database=TodoDb;TrustServerCertificate=true;Trusted_Connection=True;",
+        optionsBuilder.UseSqlServer(Configuration.ConfigurationString,
             optionsBuilder => optionsBuilder.EnableRetryOnFailure());
 
         return new ApplicationDbContext(optionsBuilder.Options);
