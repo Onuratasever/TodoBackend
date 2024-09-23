@@ -12,7 +12,7 @@ using TodoBackend.Persistence;
 namespace TodoBackend.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240920173832_migration1")]
+    [Migration("20240923115703_migration1")]
     partial class migration1
     {
         /// <inheritdoc />
