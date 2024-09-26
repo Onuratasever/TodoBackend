@@ -12,6 +12,9 @@
 
     <ItemGroup>
       <Folder Include="Abstractions\" />
+      <Folder Include="SubTasks\" />
+      <Folder Include="TodoItems\" />
+      <Folder Include="TodoLists\" />
     </ItemGroup>
 
     <ItemGroup>
