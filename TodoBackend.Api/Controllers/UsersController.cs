@@ -1,4 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TodoBackend.Application.Users.Create;
+using TodoBackend.Application.Users.Delete;
+using TodoBackend.Application.Users.GetAll;
+using TodoBackend.Application.Users.GetById;
+using TodoBackend.Application.Users.Update;
 using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Controllers;
@@ -8,81 +14,59 @@ namespace TodoBackend.Controllers;
 public class UsersController: ControllerBase
 {
     readonly private IUserRepository _userRepository;
-    
-    public UsersController(IUserRepository userRepository)
+    private readonly IMediator _mediator;
+    public UsersController(IUserRepository userRepository, IMediator mediator)
     {
         _userRepository = userRepository;
+        _mediator = mediator;
     }
     
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    [HttpGet()]
+    public async Task<IActionResult> GetUserById([FromQuery] GetByIdQueryRequest request)
     {
-        var user = await _userRepository.GetByIdAsync(id);
-        if (user == null)
+        var response = await _mediator.Send(request);
+        if (response.user == null)
         {
             return NotFound();
         }
-        return Ok(user);
+        return Ok(response);
     }
     
     [HttpGet("getAllUsers")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetAllQueryRequest request)
     {
-        var users = await _userRepository.GetAllAsync();
-        return Ok(users);
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
     
     [HttpPost("createUser")]
-    public async Task<IActionResult> CreateUser(User user)
+    public async Task<IActionResult> CreateUser(CreateCommandRequest request)
     {
-        if(user == null)
-        {
-            return BadRequest();
-        }
-        user.Id = Guid.NewGuid();
-        user.CreatedAt = DateTime.Now;
-        user.UpdatedAt = DateTime.Now;
-        
-        _userRepository.Add(user);
-        
-        await _userRepository.SaveChangesAsync();
-        return Ok(user);
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
     
-    [HttpPut("updateUser/{id:guid}")]
-    public async Task<IActionResult> UpdateUser(Guid id, User user) //userden önce frombody
+    [HttpPut("updateUser")]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateCommandRequest request)
     {
-        var existingUser = await _userRepository.GetByIdAsync(id);
-        if(existingUser == null)
+        var response = await _mediator.Send(request);
+        if (response.User == null)
         {
-            return NotFound("User not found");
+            return NotFound();
         }
-        
-        existingUser.FirstName = user.FirstName;
-        existingUser.LastName = user.LastName;
-        existingUser.Username = user.Username;
-        existingUser.Email = user.Email;
-        existingUser.Role = user.Role;
-        existingUser.UpdatedAt = DateTime.Now;
-        
-        _userRepository.Update(existingUser);
-        
-        await _userRepository.SaveChangesAsync();
-        return Ok(existingUser);
+        return Ok(response);
     }
     
     [HttpDelete("deleteUser/{id:guid}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
-        var existingUser = await _userRepository.GetByIdAsync(id);
-        if(existingUser == null)
+        var request = new DeleteCommandRequest { Id = id };
+        var response = await _mediator.Send(request);
+        if (!response.Success)
         {
-            return NotFound("User not found");
+            return NotFound(response.Message);
         }
-        
-        _userRepository.Delete(existingUser);
-        
-        await _userRepository.SaveChangesAsync();
-        return Ok();
+
+        return Ok(response.Message);
     }
 }
