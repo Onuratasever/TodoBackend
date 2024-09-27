@@ -1,4 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TodoBackend.Application.TodoLists.GetByTodoListId;
+using TodoBackend.Application.TodoLists.GetByUserId;
+using TodoBackend.Application.TodoLists.Update;
 using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Controllers;
@@ -8,33 +12,39 @@ namespace TodoBackend.Controllers;
 public class TodoListsController: ControllerBase
 {
     readonly private ITodoListRepository _todoListRepository;
-    
-    public TodoListsController(ITodoListRepository todoListRepository)
+    readonly private IMediator _mediator;
+    public TodoListsController(ITodoListRepository todoListRepository, IMediator mediator)
     {
         _todoListRepository = todoListRepository;
+        _mediator = mediator;
     }
     
     [HttpGet("{userId:guid}/getAllTodoLists")]
-    public async Task<IActionResult> GetUserById(Guid userId)
+    public async Task<IActionResult> GetByUserId(Guid userId)
     {
-        var todoLists = await _todoListRepository.GetListAsync(user => user.UserId == userId);
-        return Ok(todoLists);
+        var request = new GetByUserIdQueryRequest {Id = userId};
+        var response = await _mediator.Send(request);
+        return Ok(response);
     }
     
     [HttpGet("{userId:guid}/{id:guid}")]
     public async Task<IActionResult> GetTodoListById(Guid userId,Guid id)
     {
-        var todoList = await _todoListRepository.GetByIdAsync(id);
-        if (todoList == null)
+        var request = new GetByTodoListIdQueryRequest {TodoListId = id, UserId = userId};
+        
+        var response = await _mediator.Send(request);
+        
+        if (!response.Success && response.Message == "TodoList not found")
         {
             return NotFound();
         }
         
-        if (userId != todoList.UserId)
+        if (!response.Success && response.Message == "Unauthorized")
         {
-            return Unauthorized();    
+            return Unauthorized();
         }
-        return Ok(todoList);
+        
+        return Ok(response);
     }
     
     [HttpPost("{userId:guid}/createTodoList")]
@@ -51,26 +61,24 @@ public class TodoListsController: ControllerBase
         return Ok(todoList);
     }
     
-    [HttpPut("{userId:guid}/updateTodoList/{id:guid}")]
-    public async Task<IActionResult> UpdateTodoList(Guid userId, Guid id, TodoList todoList)
+    [HttpPut("updateTodoList")]
+    public async Task<IActionResult> UpdateTodoList([FromQuery] UpdateCommandRequest request)
     {
-        var existingTodoList = await _todoListRepository.GetByIdAsync(id);
-        if(existingTodoList == null)
+        // var request = new UpdateCommandRequest {UserId = userId, TodoListId = id, Title = todoList.Title};
+        
+        var response = await _mediator.Send(request);
+        
+        if (!response.Success && response.Message == "TodoList not found")
         {
-            return NotFound("TodoList not found");
+            return NotFound();
         }
-
-        if (existingTodoList.UserId != userId)
+        
+        if (!response.Success && response.Message == "Unauthorized")
         {
             return Unauthorized();
         }
-        existingTodoList.Title = todoList.Title;
-        existingTodoList.UpdatedAt = DateTime.Now;
         
-        _todoListRepository.Update(existingTodoList);
-        
-        await _todoListRepository.SaveChangesAsync();
-        return Ok(existingTodoList);
+        return Ok(response.TodoList);
     }
     
     [HttpDelete("{userId:guid}/deleteTodoList/{id:guid}")]
