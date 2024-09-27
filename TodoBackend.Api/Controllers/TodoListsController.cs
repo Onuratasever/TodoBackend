@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TodoBackend.Application.TodoLists.Create;
+using TodoBackend.Application.TodoLists.Delete;
 using TodoBackend.Application.TodoLists.GetByTodoListId;
 using TodoBackend.Application.TodoLists.GetByUserId;
 using TodoBackend.Application.TodoLists.Update;
@@ -47,18 +49,11 @@ public class TodoListsController: ControllerBase
         return Ok(response);
     }
     
-    [HttpPost("{userId:guid}/createTodoList")]
-    public async Task<IActionResult> CreateTodoList(Guid userId,TodoList todoList)
+    [HttpPost("createTodoList")]
+    public async Task<IActionResult> CreateTodoList([FromQuery] CreateCommandRequest request)
     {
-        todoList.Id = Guid.NewGuid();
-        todoList.CreatedAt = DateTime.Now;
-        todoList.UpdatedAt = DateTime.Now;
-        todoList.UserId = userId;
-        
-        _todoListRepository.Add(todoList);
-        
-        await _todoListRepository.SaveChangesAsync();
-        return Ok(todoList);
+        var response = await _mediator.Send(request);
+        return Ok(response.TodoList);
     }
     
     [HttpPut("updateTodoList")]
@@ -81,23 +76,20 @@ public class TodoListsController: ControllerBase
         return Ok(response.TodoList);
     }
     
-    [HttpDelete("{userId:guid}/deleteTodoList/{id:guid}")]
-    public async Task<IActionResult> DeleteTodoList(Guid userId,Guid id)
+    [HttpDelete("deleteTodoList")]
+    public async Task<IActionResult> DeleteTodoList([FromQuery] DeleteCommandRequest request)
     {
-        var existingTodoList = await _todoListRepository.GetByIdAsync(id);
-        if(existingTodoList == null)
+        var response = await _mediator.Send(request);
+        if (!response.Success && response.Message == "TodoList not found")
         {
-            return NotFound("TodoList not found");
+            return NotFound();
         }
-
-        if (existingTodoList.UserId != userId)
+        
+        if (!response.Success && response.Message == "Unauthorized")
         {
             return Unauthorized();
         }
         
-        _todoListRepository.Delete(existingTodoList);
-        
-        await _todoListRepository.SaveChangesAsync();
         return Ok();
     }
 }
