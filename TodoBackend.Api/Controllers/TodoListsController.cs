@@ -13,8 +13,8 @@ namespace TodoBackend.Controllers;
 [ApiController]
 public class TodoListsController: ControllerBase
 {
-    readonly private ITodoListRepository _todoListRepository;
-    readonly private IMediator _mediator;
+    private readonly  ITodoListRepository _todoListRepository;
+    private readonly IMediator _mediator;
     public TodoListsController(ITodoListRepository todoListRepository, IMediator mediator)
     {
         _todoListRepository = todoListRepository;
