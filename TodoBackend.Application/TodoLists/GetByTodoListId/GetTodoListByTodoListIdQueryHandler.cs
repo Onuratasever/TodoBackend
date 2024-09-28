@@ -3,21 +3,21 @@ using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Application.TodoLists.GetByTodoListId;
 
-public class GetByTodoListIdQueryHandler:IRequestHandler<GetByTodoListIdQueryRequest,GetByTodoListIdQueryResponse>
+public class GetTodoListByTodoListIdQueryHandler:IRequestHandler<GetTodoListByTodoListIdQueryRequest,GetTodoListByTodoListIdQueryResponse>
 {
     private readonly ITodoListRepository _todoListRepository;
     
-    public GetByTodoListIdQueryHandler(ITodoListRepository todoListRepository)
+    public GetTodoListByTodoListIdQueryHandler(ITodoListRepository todoListRepository)
     {
         _todoListRepository = todoListRepository;
     }
     
-    public async Task<GetByTodoListIdQueryResponse> Handle(GetByTodoListIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<GetTodoListByTodoListIdQueryResponse> Handle(GetTodoListByTodoListIdQueryRequest request, CancellationToken cancellationToken)
     {
         var todoList = await _todoListRepository.GetByIdAsync(request.TodoListId);
         if (todoList == null)
         {
-            return new GetByTodoListIdQueryResponse
+            return new GetTodoListByTodoListIdQueryResponse
             {
                 Success = false,
                 Message = "TodoList not found",
@@ -27,7 +27,7 @@ public class GetByTodoListIdQueryHandler:IRequestHandler<GetByTodoListIdQueryReq
         
         if (request.UserId != todoList.UserId)
         {
-            return new GetByTodoListIdQueryResponse
+            return new GetTodoListByTodoListIdQueryResponse
             {
                 Success = false,
                 Message = "Unauthorized",
@@ -35,7 +35,7 @@ public class GetByTodoListIdQueryHandler:IRequestHandler<GetByTodoListIdQueryReq
             };    
         }
 
-        return new GetByTodoListIdQueryResponse
+        return new GetTodoListByTodoListIdQueryResponse
         {
             Success = true,
             Message = "TodoList found",

@@ -3,19 +3,19 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.GetAll;
 
-public class GetAllQueryHandler: IRequestHandler<GetAllQueryRequest, GetAllQueryResponse> 
+public class GetAllUsersQueryHandler: IRequestHandler<GetAllUsersQueryRequest, GetAllUsersQueryResponse> 
 {
     readonly private IUserRepository _userRepository;
     
-    public GetAllQueryHandler(IUserRepository userRepository)
+    public GetAllUsersQueryHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
     
-    public async Task<GetAllQueryResponse> Handle(GetAllQueryRequest request, CancellationToken cancellationToken)
+    public async Task<GetAllUsersQueryResponse> Handle(GetAllUsersQueryRequest request, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllAsync();
-        return new GetAllQueryResponse
+        return new GetAllUsersQueryResponse
         {
             _users = users
         };

@@ -3,16 +3,16 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.Create;
 
-public class CreateCommandHandler: IRequestHandler<CreateCommandRequest, CreateCommandResponse>
+public class CreateUserCommandHandler: IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
 {
     private readonly IUserRepository _userRepository;
     
-    public CreateCommandHandler(IUserRepository userRepository)
+    public CreateUserCommandHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
     
-    public async Task<CreateCommandResponse> Handle(CreateCommandRequest request, CancellationToken cancellationToken)
+    public async Task<CreateUserCommandResponse> Handle(CreateUserCommandRequest request, CancellationToken cancellationToken)
     {
         request.User.Id = Guid.NewGuid();
         request.User.CreatedAt = DateTime.Now;
@@ -22,7 +22,7 @@ public class CreateCommandHandler: IRequestHandler<CreateCommandRequest, CreateC
         
         await _userRepository.SaveChangesAsync();
 
-        return new CreateCommandResponse
+        return new CreateUserCommandResponse
         {
             user = request.User
         };

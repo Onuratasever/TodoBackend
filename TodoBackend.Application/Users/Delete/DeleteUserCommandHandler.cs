@@ -3,22 +3,22 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.Delete;
 
-public class DeleteCommandHandler: IRequestHandler<DeleteCommandRequest, DeleteCommandResponse>
+public class DeleteUserCommandHandler: IRequestHandler<DeleteUserCommandRequest, DeleteUserCommandResponse>
 {
     private readonly IUserRepository _userRepository;
     
-    public DeleteCommandHandler(IUserRepository userRepository)
+    public DeleteUserCommandHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
     
-    public async Task<DeleteCommandResponse> Handle(DeleteCommandRequest request, CancellationToken cancellationToken)
+    public async Task<DeleteUserCommandResponse> Handle(DeleteUserCommandRequest request, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(request.Id);
         
         if (existingUser == null)
         {
-            return new DeleteCommandResponse
+            return new DeleteUserCommandResponse
             {
                 Success = false,
                 Message = "User not found"
@@ -29,7 +29,7 @@ public class DeleteCommandHandler: IRequestHandler<DeleteCommandRequest, DeleteC
         
         await _userRepository.SaveChangesAsync();
         
-        return new DeleteCommandResponse
+        return new DeleteUserCommandResponse
         {
             Success = true,
             Message = "User successfully deleted"

@@ -3,15 +3,15 @@ using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Application.TodoLists.Create;
 
-public class CreateCommandHandler:IRequestHandler<CreateCommandRequest, CreateCommandResponse>
+public class CreateTodoListCommandHandler:IRequestHandler<CreateTodoListCommandRequest, CreateTodoListCommandResponse>
 {
     private readonly ITodoListRepository _todoListRepository;
     
-    public CreateCommandHandler(ITodoListRepository todoListRepository)
+    public CreateTodoListCommandHandler(ITodoListRepository todoListRepository)
     {
         _todoListRepository = todoListRepository;
     }
-    public async Task<CreateCommandResponse> Handle(CreateCommandRequest request, CancellationToken cancellationToken)
+    public async Task<CreateTodoListCommandResponse> Handle(CreateTodoListCommandRequest request, CancellationToken cancellationToken)
     {
         var todoList = new TodoList
         {
@@ -26,7 +26,7 @@ public class CreateCommandHandler:IRequestHandler<CreateCommandRequest, CreateCo
         
         await _todoListRepository.SaveChangesAsync();
         
-        return new CreateCommandResponse
+        return new CreateTodoListCommandResponse
         {
             TodoList = todoList
         };

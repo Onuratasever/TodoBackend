@@ -3,20 +3,20 @@ using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Application.TodoLists.Delete;
 
-public class DeleteCommandHandler:IRequestHandler<DeleteCommandRequest, DeleteCommandResponse>
+public class DeleteTodoListCommandHandler:IRequestHandler<DeleteTodoListCommandRequest, DeleteTodoListCommandResponse>
 {
     private readonly ITodoListRepository _todoListRepository;
     
-    public DeleteCommandHandler(ITodoListRepository todoListRepository)
+    public DeleteTodoListCommandHandler(ITodoListRepository todoListRepository)
     {
         _todoListRepository = todoListRepository;
     }
-    public async Task<DeleteCommandResponse> Handle(DeleteCommandRequest request, CancellationToken cancellationToken)
+    public async Task<DeleteTodoListCommandResponse> Handle(DeleteTodoListCommandRequest request, CancellationToken cancellationToken)
     {
         var existingTodoList = await _todoListRepository.GetByIdAsync(request.TodoListId);
         if(existingTodoList == null)
         {
-            return new DeleteCommandResponse
+            return new DeleteTodoListCommandResponse
             {
                 Success = false,
                 Message = "TodoList not found"
@@ -25,7 +25,7 @@ public class DeleteCommandHandler:IRequestHandler<DeleteCommandRequest, DeleteCo
 
         if (existingTodoList.UserId != request.UserId)
         {
-            return new DeleteCommandResponse
+            return new DeleteTodoListCommandResponse
             {
                 Success = false,
                 Message = "Unauthorized"
@@ -35,7 +35,7 @@ public class DeleteCommandHandler:IRequestHandler<DeleteCommandRequest, DeleteCo
         _todoListRepository.Delete(existingTodoList);
         
         await _todoListRepository.SaveChangesAsync();
-        return new DeleteCommandResponse
+        return new DeleteTodoListCommandResponse
         {
             Success = true,
             Message = "TodoList deleted successfully"

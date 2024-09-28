@@ -3,7 +3,7 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.Update;
 
-public class UpdateCommandRequest:IRequest<UpdateCommandResponse>
+public class UpdateUserCommandRequest:IRequest<UpdateUserCommandResponse>
 {
     public Guid Id { get; set; }
     public string? FirstName { get; set; }

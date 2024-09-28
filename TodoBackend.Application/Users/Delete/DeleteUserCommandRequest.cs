@@ -2,7 +2,7 @@ using MediatR;
 
 namespace TodoBackend.Application.Users.Delete;
 
-public class DeleteCommandRequest: IRequest<DeleteCommandResponse>
+public class DeleteUserCommandRequest: IRequest<DeleteUserCommandResponse>
 {
     public Guid Id { get; set; }
 }

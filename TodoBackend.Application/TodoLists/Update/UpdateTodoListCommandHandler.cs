@@ -3,21 +3,21 @@ using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Application.TodoLists.Update;
 
-public class UpdateCommandHandler: IRequestHandler<UpdateCommandRequest, UpdateCommandResponse>
+public class UpdateTodoListCommandHandler: IRequestHandler<UpdateTodoListCommandRequest, UpdateTodoListCommandResponse>
 {
     private readonly ITodoListRepository _todoListRepository;
     
-    public UpdateCommandHandler(ITodoListRepository todoListRepository)
+    public UpdateTodoListCommandHandler(ITodoListRepository todoListRepository)
     {
         _todoListRepository = todoListRepository;
     }
     
-    public async Task<UpdateCommandResponse> Handle(UpdateCommandRequest request, CancellationToken cancellationToken)
+    public async Task<UpdateTodoListCommandResponse> Handle(UpdateTodoListCommandRequest request, CancellationToken cancellationToken)
     {
         var existingTodoList = await _todoListRepository.GetByIdAsync(request.TodoListId);
         if(existingTodoList == null)
         {
-            return new UpdateCommandResponse
+            return new UpdateTodoListCommandResponse
             {
                 Success = false,
                 Message = "TodoList not found",
@@ -27,7 +27,7 @@ public class UpdateCommandHandler: IRequestHandler<UpdateCommandRequest, UpdateC
 
         if (existingTodoList.UserId != request.UserId)
         {
-            return new UpdateCommandResponse
+            return new UpdateTodoListCommandResponse
             {
                 Success = false,
                 Message = "Unauthorized",
@@ -41,7 +41,7 @@ public class UpdateCommandHandler: IRequestHandler<UpdateCommandRequest, UpdateC
         
         await _todoListRepository.SaveChangesAsync();
 
-        return new UpdateCommandResponse
+        return new UpdateTodoListCommandResponse
         {
             Success = true,
             Message = "TodoList updated successfully",

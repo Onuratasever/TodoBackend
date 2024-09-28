@@ -3,21 +3,21 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.Update;
 
-public class UpdateCommandHandler: IRequestHandler<UpdateCommandRequest, UpdateCommandResponse>
+public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommandRequest, UpdateUserCommandResponse>
 {
     private readonly IUserRepository _userRepository;
     
-    public UpdateCommandHandler(IUserRepository userRepository)
+    public UpdateUserCommandHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
     
-    public async Task<UpdateCommandResponse> Handle(UpdateCommandRequest request, CancellationToken cancellationToken)
+    public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
     {
         var existingUser = await _userRepository.GetByIdAsync(request.Id);
         if(existingUser == null)
         {
-            return new UpdateCommandResponse
+            return new UpdateUserCommandResponse
             {
                 User = null
             };
@@ -45,7 +45,7 @@ public class UpdateCommandHandler: IRequestHandler<UpdateCommandRequest, UpdateC
         
         await _userRepository.SaveChangesAsync();
 
-        return new UpdateCommandResponse
+        return new UpdateUserCommandResponse
         {
             User = existingUser
         };

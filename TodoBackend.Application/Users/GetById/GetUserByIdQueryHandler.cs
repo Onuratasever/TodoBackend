@@ -4,19 +4,19 @@ using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.GetById;
 
-public class GetByIdQueryHandler: IRequestHandler<GetByIdQueryRequest, GetByIdQueryResponse>
+public class GetUserByIdQueryHandler: IRequestHandler<GetUserByIdQueryRequest, GetUserByIdQueryResponse>
 {
     readonly private IUserRepository _userRepository;
     
-    public GetByIdQueryHandler(IUserRepository userRepository)
+    public GetUserByIdQueryHandler(IUserRepository userRepository)
     {
         _userRepository = userRepository;
     }
     
-    public async Task<GetByIdQueryResponse> Handle(GetByIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<GetUserByIdQueryResponse> Handle(GetUserByIdQueryRequest request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.Id);
-        return new GetByIdQueryResponse
+        return new GetUserByIdQueryResponse
         {
             user = user
         };

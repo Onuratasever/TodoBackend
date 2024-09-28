@@ -3,19 +3,19 @@ using TodoBackend.Domain.Entities.TodoList;
 
 namespace TodoBackend.Application.TodoLists.GetByUserId;
 
-public class GetByUserIdQueryHandler:IRequestHandler<GetByUserIdQueryRequest,GetByUserIdQueryResponse>
+public class GetTodoListByUserIdQueryHandler:IRequestHandler<GetTodoListByUserIdQueryRequest,GetTodoListByUserIdQueryResponse>
 {
     private readonly ITodoListRepository _todoListRepository;
     
-    public GetByUserIdQueryHandler(ITodoListRepository todoListRepository)
+    public GetTodoListByUserIdQueryHandler(ITodoListRepository todoListRepository)
     {
         _todoListRepository = todoListRepository;
     }
     
-    public async Task<GetByUserIdQueryResponse> Handle(GetByUserIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<GetTodoListByUserIdQueryResponse> Handle(GetTodoListByUserIdQueryRequest request, CancellationToken cancellationToken)
     {
         var todoLists = await _todoListRepository.GetListAsync(user => user.UserId == request.Id);
-        return new GetByUserIdQueryResponse
+        return new GetTodoListByUserIdQueryResponse
         {
             TodoListsList = todoLists.ToList()
         };
