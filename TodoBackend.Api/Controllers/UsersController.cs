@@ -22,7 +22,7 @@ public class UsersController: ControllerBase
     }
     
     [HttpGet()]
-    public async Task<IActionResult> GetUserById([FromQuery] GetByIdQueryRequest request)
+    public async Task<IActionResult> GetUserById([FromQuery] GetUserByIdQueryRequest request)
     {
         var response = await _mediator.Send(request);
         if (response.user == null)
@@ -33,21 +33,21 @@ public class UsersController: ControllerBase
     }
     
     [HttpGet("getAllUsers")]
-    public async Task<IActionResult> GetAllUsers([FromQuery] GetAllQueryRequest request)
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQueryRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
     
     [HttpPost("createUser")]
-    public async Task<IActionResult> CreateUser(CreateCommandRequest request)
+    public async Task<IActionResult> CreateUser(CreateUserCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response);
     }
     
     [HttpPut("updateUser")]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateCommandRequest request)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommandRequest request)
     {
         var response = await _mediator.Send(request);
         if (response.User == null)
@@ -60,7 +60,7 @@ public class UsersController: ControllerBase
     [HttpDelete("deleteUser/{id:guid}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
-        var request = new DeleteCommandRequest { Id = id };
+        var request = new DeleteUserCommandRequest { Id = id };
         var response = await _mediator.Send(request);
         if (!response.Success)
         {

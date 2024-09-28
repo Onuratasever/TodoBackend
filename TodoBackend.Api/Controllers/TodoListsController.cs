@@ -24,7 +24,7 @@ public class TodoListsController: ControllerBase
     [HttpGet("{userId:guid}/getAllTodoLists")]
     public async Task<IActionResult> GetByUserId(Guid userId)
     {
-        var request = new GetByUserIdQueryRequest {Id = userId};
+        var request = new GetTodoListByUserIdQueryRequest {Id = userId};
         var response = await _mediator.Send(request);
         return Ok(response);
     }
@@ -32,7 +32,7 @@ public class TodoListsController: ControllerBase
     [HttpGet("{userId:guid}/{id:guid}")]
     public async Task<IActionResult> GetTodoListById(Guid userId,Guid id)
     {
-        var request = new GetByTodoListIdQueryRequest {TodoListId = id, UserId = userId};
+        var request = new GetTodoListByTodoListIdQueryRequest {TodoListId = id, UserId = userId};
         
         var response = await _mediator.Send(request);
         
@@ -50,16 +50,16 @@ public class TodoListsController: ControllerBase
     }
     
     [HttpPost("createTodoList")]
-    public async Task<IActionResult> CreateTodoList([FromQuery] CreateCommandRequest request)
+    public async Task<IActionResult> CreateTodoList([FromQuery] CreateTodoListCommandRequest request)
     {
         var response = await _mediator.Send(request);
         return Ok(response.TodoList);
     }
     
     [HttpPut("updateTodoList")]
-    public async Task<IActionResult> UpdateTodoList([FromQuery] UpdateCommandRequest request)
+    public async Task<IActionResult> UpdateTodoList([FromQuery] UpdateTodoListCommandRequest request)
     {
-        // var request = new UpdateCommandRequest {UserId = userId, TodoListId = id, Title = todoList.Title};
+        // var request = new UpdateUserCommandRequest {UserId = userId, TodoListId = id, Title = todoList.Title};
         
         var response = await _mediator.Send(request);
         
@@ -77,7 +77,7 @@ public class TodoListsController: ControllerBase
     }
     
     [HttpDelete("deleteTodoList")]
-    public async Task<IActionResult> DeleteTodoList([FromQuery] DeleteCommandRequest request)
+    public async Task<IActionResult> DeleteTodoList([FromQuery] DeleteTodoListCommandRequest request)
     {
         var response = await _mediator.Send(request);
         if (!response.Success && response.Message == "TodoList not found")
