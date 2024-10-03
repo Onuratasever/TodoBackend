@@ -25,7 +25,7 @@ public class UsersController: ControllerBase
     public async Task<IActionResult> GetUserById([FromQuery] GetUserByIdQueryRequest request)
     {
         var response = await _mediator.Send(request);
-        if (response.user == null)
+        if (response.User == null)
         {
             return NotFound();
         }
