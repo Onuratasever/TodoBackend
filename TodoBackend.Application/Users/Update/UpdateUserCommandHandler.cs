@@ -1,4 +1,5 @@
 using MediatR;
+using AutoMapper;
 using TodoBackend.Domain.Entities.User;
 
 namespace TodoBackend.Application.Users.Update;
@@ -6,10 +7,11 @@ namespace TodoBackend.Application.Users.Update;
 public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommandRequest, UpdateUserCommandResponse>
 {
     private readonly IUserRepository _userRepository;
-    
-    public UpdateUserCommandHandler(IUserRepository userRepository)
+    private readonly IMapper _mapper;
+    public UpdateUserCommandHandler(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
     
     public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
@@ -22,26 +24,8 @@ public class UpdateUserCommandHandler: IRequestHandler<UpdateUserCommandRequest,
                 User = null
             };
         }
-        
-        if(request.FirstName != null && request.FirstName.Length > 0)
-        {
-            existingUser.FirstName = request.FirstName;
-        }
-        if(request.LastName != null && request.LastName.Length > 0)
-        {
-            existingUser.LastName = request.LastName;
-        }
-        if(request.Username != null && request.Username.Length > 0)
-        {
-            existingUser.Username = request.Username;
-        }
-        if(request.Email != null && request.Email.Length > 0)
-        {
-            existingUser.Email = request.Email;
-        }
-        existingUser.UpdatedAt = DateTime.Now;
-        
-        _userRepository.Update(existingUser);
+
+        _mapper.Map(request, existingUser);
         
         await _userRepository.SaveChangesAsync();
 
