@@ -10,14 +10,14 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddAutoMapper(AssemblyReference.Application);
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(AssemblyReference.Application);
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(AssemblyReference.Application); // değiştir
         });
-        // services.AddFluentValidation(configuration =>
-        //     configuration.RegisterValidatorsFromAssemblyContaining<AssemblyReference.Application>());
+        // services.AddAutoMapper();
         return services; // değiştir
     }
 
