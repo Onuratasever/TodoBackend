@@ -15,8 +15,8 @@ public class UserEndpoint: IEndpoint
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
         var routeGroup = app
-            .MapGroup("Todo")
-            .WithTags("Todo");
+            .MapGroup("Users")
+            .WithTags("Users");
 
         MapV1(routeGroup);
     }
